@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+  <title>Brain Dump</title>
+	<!-- set meta -->
+	<meta charset="utf-8">
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <!-- set viewport to device width to allow responsiveness -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- jQuery CDN -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Bootstrap JS -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <!-- custom sctipts -->
+  <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+  <script src="/static/js/app.js"></script>
+	</head>
+
+	<body>
+		<div class="jumbotron">
+		  <h1>BRAIN DUMP</h1>
+		</div>
+
+		<div class="container">
+		  <div class="row">
+
+				<!-- start of LHC -->
+		    <div class="col-sm-2 col-sm-offset-1" id="LHC"> 
+		      <h1 id="headerDate"></h1>
+		      <div id="count"></div>
+		    </div> 
+		    <!-- end of LHC -->
+
+				<!-- start of RHC -->
+		    <div class="col-sm-7 col-sm-offset-1" id="RHC"> 
+		      <form id="newPost" class="form-group"> <!-- new post form -->
+		       	<input type="text" id="newPostInput" name="newPost" class="form-control" rows="2" placeholder="What is in your brain?">
+		        <div class="text-right">
+		          <button type="submit" id="submitButton" class="btn btn-default">Dump</button>
+		        </div>  
+		      </form> <!-- end of new post form -->
+
+		      <ul id="post-ul" class="list-group"> <!-- list of posts -->
+		      	<% for (var i = posts.length - 1; i >= 0; i--) { %>
+		      		<li class="list-group-item">
+		      			<%= posts[i].newPost %>
+								<button type="button" data-id="<%= posts[i].id %>" class="delete btn btn-default btn-sm"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+								<br>
+								<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#toggle<%= posts[i].id %>" aria-expanded="false" aria-controls="toggle<%= posts[i].id %>">
+								  Comments
+								</button>
+								<div class="collapse" id="toggle<%= posts[i].id %>"> <!-- start of what is in toggle -->
+								  <div class="well">
+								    <form data-id="<%= posts[i].id %>" class="form-group newComment">
+								      <input type="text" id="newCommentInput" name="newComment" class="form-control" placeholder="Comments...">
+								      <button type="submit" data-id="<%= posts[i].id %>" class="btn btn-primary updateButtons">Add</button>
+								    </form>
+						        <ul data-id="<%= posts[i].id %>" class="list-group comment-ul"> <!-- list of comments -->
+						    	    <% for (var j = comments.length - 1; j >= 0; j--) { %>
+						    	    	<% if (comments[j].id === posts[i].id) { %>
+						    	    		<li class="list-group-item">
+						    	    			<%= comments[j].newComment %> 
+						    	    		</li>
+						    	    	<% } %>
+						        	<% } %>
+						        </ul> 
+								  </div>
+								</div> <!-- end of what is in toggle -->
+		      		</li>
+		      	<% } %>
+
+		      </ul> <!-- end of list of posts -->
+
+		    </div> 
+		    <!-- end of RHC -->
+		  
+		  </div> <!-- end of row -->
+		</div> <!-- end of container -->
+	</body>
+</html>
