@@ -38,12 +38,22 @@ app.get('/', function(req, res) {
 
 // api GET route for posts
 app.get('/api/posts', function(req, res){
-	res.json(posts);
+	Post.find({}, function(err, posts){
+		if (err) {
+			console.log(err);
+		}
+		res.json(posts);
+	});
 });
 
 // api GET route for comments
 app.get('/api/comments', function(req, res){
-	res.json(comments);
+	Comment.find({}, function(err, comments){
+		if (err) {
+			console.log(err);
+		}
+		res.json(comments);
+	});
 });
 
 // POST route for new posts
@@ -56,7 +66,7 @@ app.post('/api/posts', function(req, res){
 	});
 });
 
-// DELETE route for new posts
+// DELETE route for posts
 app.delete('/posts/:_id', function(req, res){
 	Post.findOne( { _id: req.params._id } , function(err, post){
 		if (err) {

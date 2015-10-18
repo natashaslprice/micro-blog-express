@@ -16,6 +16,7 @@
   <!-- custom sctipts -->
   <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
   <script src="/static/js/app.js"></script>
+  <script src="/static/js/jquery-dateFormat.js"></script>
 	</head>
 
 	<body>
@@ -29,7 +30,9 @@
 				<!-- start of LHC -->
 		    <div class="col-sm-2 col-sm-offset-1" id="LHC"> 
 		      <h1 id="headerDate"></h1>
-		      <div id="count"></div>
+		      <div id="count">
+		      	<%= posts.length %>
+		      </div>
 		    </div> 
 		    <!-- end of LHC -->
 
@@ -40,7 +43,7 @@
 		        <div class="text-right">
 		          <button type="submit" id="submitButton" class="btn btn-default">Dump</button>
 		        </div>  
-		        
+
 		      </form> <!-- end of new post form -->
 
 		      <ul id="post-ul" class="list-group"> <!-- list of posts -->
@@ -49,7 +52,7 @@
 		      			<%= posts[i].newPost %>
 								<button type="button" data-id="<%= posts[i].id %>" class="delete btn btn-default btn-sm"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
 								<br>
-								<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#toggle<%= posts[i].id %>" aria-expanded="false" aria-controls="toggle<%= posts[i].id %>">
+								<button class="btn btn-primary commentButtons" type="button" data-toggle="collapse" data-target="#toggle<%= posts[i].id %>" aria-expanded="false" aria-controls="toggle<%= posts[i].id %>">
 								  Comments
 								</button>
 								<div class="collapse" id="toggle<%= posts[i].id %>"> <!-- start of what is in toggle -->
@@ -60,7 +63,6 @@
 								    </form>
 						        <ul data-id="<%= posts[i].id %>" class="list-group comment-ul"> <!-- list of comments -->
 						    	    <% for (var j = comments.length - 1; j >= 0; j--) { %>
-						    	    	<% console.log(comments[j].id + "and" + posts[i].id); %>
 						    	    	<% if (comments[j].id === posts[i].id) { %>
 						    	    		<li class="list-group-item">
 						    	    			<%= comments[j].newComment %> 

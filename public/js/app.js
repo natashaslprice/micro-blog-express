@@ -3,6 +3,17 @@
 $(document).ready(function() {
 	console.log("test");
 
+	// find todays date and append to headerDate div
+	var currentDate = new Date();
+	var currentDateTime = $.format.date(currentDate, 'H:mm');
+	var currentDateDate = $.format.date(currentDate, 'ddd d MMM');
+
+	$("#headerDate").append(currentDateTime + '<hr>' + currentDateDate);
+	
+	// find starting post count and create integer
+	var postCount = $('#count').html();
+	postCount = parseInt(postCount);
+
 	// CREATE NEW POST
 	// on submit of #newPost form
 	$('#newPost').submit(function(e) {
@@ -11,6 +22,9 @@ $(document).ready(function() {
 
 		// check input not empty
 		if ($("#newPostInput").val().trim().length > 0) {
+			// increase post count and update #count html
+			postCount = postCount + 1;
+			$("#count").html(postCount);
 			// ajax post to server
 			$.ajax({
 				url: "/api/posts",
@@ -31,7 +45,7 @@ $(document).ready(function() {
 			});
 		}
 		else {
-			
+			alert('Oopsie! You need to type some words before we can create your Brain Dump...');
 		}
 	});
 	// END OF CREATE NEW POST
@@ -41,6 +55,9 @@ $(document).ready(function() {
 	$('#post-ul').on('click', '.delete', function(e) {
 		e.preventDefault();
 		console.log("delete button clicked");
+		// decrease post count and update #count html
+		postCount = postCount - 1;
+		$("#count").html(postCount);
 
 		// find id of .delete button
 		var deletePostId = $(this).data().id;
@@ -69,28 +86,34 @@ $(document).ready(function() {
 		var correctId = $(this).attr('data-id');
 		console.log(correctId);
 
-		// ajax post to server
-		$.ajax({
-			url: "/api/comments",
-			type: "POST",
-			data: $(this).siblings().serialize()
-		}).done(function(data) {
-				// change comment's _id so equal to post's _id
-				console.log(data);
-				data._id = correctId;
-				console.log(data);
-				// turn serialized data into string with same Id as post
-				var commentHTML = makeHTMLStringComment(data);
-				// find correct list and prepend comment
-				var correctComment = $('.comment-ul[data-id="' + correctId + '"]');
-				correctComment.prepend(commentHTML);
-				// clear form
-				$("#newCommentInput").val('');
-				// give focus back to #newPostInput
-				$("#newCommentInput").focus();
-		}).fail(function(data){
-				console.log("comment form did not post to server");
-		});
+		// check input not empty
+		if ($("#newCommentInput").val().trim().length > 0) {
+			// ajax post to server
+			$.ajax({
+				url: "/api/comments",
+				type: "POST",
+				data: $(this).siblings().serialize()
+			}).done(function(data) {
+					// change comment's _id so equal to post's _id
+					console.log(data);
+					data._id = correctId;
+					console.log(data);
+					// turn serialized data into string 
+					var commentHTML = makeHTMLStringComment(data);
+					// find correct list and prepend comment
+					var correctComment = $('.comment-ul[data-id="' + correctId + '"]');
+					correctComment.prepend(commentHTML + currentDateTime + " " + currentDateDate);
+					// clear form
+					$("#newCommentInput").val('');
+					// give focus back to #newPostInput
+					$("#newCommentInput").focus();
+			}).fail(function(data){
+					console.log("comment form did not post to server");
+			});
+		}
+		else {
+			alert('Oopsie! You need to type some words before we can create your comment...');
+		}
 	});
 	// END OF CREATE NEW COMMENT
 
@@ -105,7 +128,7 @@ function makeHTMLStringPost (data){
 						data.newPost +
 						'<button type="button" data-id="' + data._id + '" class="delete btn btn-default btn-sm"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>' +
 						'<br>' +
-						'<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#toggle' + data._id + '" aria-expanded="false" aria-controls="toggle' + data._id + '">' +
+						'<button class="btn btn-primary commentButtons" type="button" data-toggle="collapse" data-target="#toggle' + data._id + '" aria-expanded="false" aria-controls="toggle' + data._id + '">' +
 						  'Comments' +
 						'</button>' +
 						'<div class="collapse" id="toggle' + data._id + '">' +
@@ -126,7 +149,6 @@ function makeHTMLStringPost (data){
 function makeHTMLStringComment (data){
 	return '<li class="list-group-item">' +
 						'<span>' + data.newComment + '</span>' +
-						'<span id="commentDate">' + new Date() + '</span>' +
 					'</li>';
 }
 // END OF MAKE HTML STRING COMMENT FUNCTION

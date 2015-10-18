@@ -29,9 +29,24 @@ h1 {
 	font-size: 25px;
 }
 
-li {
-	color: black;
-	margin: 0px;
+#submitButton {
+	margin-top: 10px;
+	margin-bottom: 15px;
 }
 
+li {
+	color: black;
+	width: 100%;
+}
 
+.delete {
+	float: right;
+}
+
+.commentButtons {
+	margin: 8px 0px;
+}
+
+.updateButtons {
+	margin: 8px 0px;
+}
