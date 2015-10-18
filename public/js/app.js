@@ -9,24 +9,30 @@ $(document).ready(function() {
 		e.preventDefault();
 		console.log("newPost form submitted");
 
-		// ajax post to server
-		$.ajax({
-			url: "/api/posts",
-			type: "POST",
-			data: $(this).serialize()
-		}).done(function(data) {
-				console.log(data);
-				// turn serialized data into <li> and string
-				var postHTML = makeHTMLStringPost(data);
-				//prepend to list
-				$("#post-ul").prepend(postHTML);
-				// clear form
-				$("#newPost")[0].reset();
-				// give focus back to #newPostInput
-				$("#newPostInput").focus();
-		}).fail(function(data){
-				console.log("post form did not post to server");
-		});
+		// check input not empty
+		if ($("#newPostInput").val().trim().length > 0) {
+			// ajax post to server
+			$.ajax({
+				url: "/api/posts",
+				type: "POST",
+				data: $(this).serialize()
+			}).done(function(data) {
+					console.log(data);
+					// turn serialized data into <li> and string
+					var postHTML = makeHTMLStringPost(data);
+					//prepend to list
+					$("#post-ul").prepend(postHTML);
+					// clear form
+					$("#newPost")[0].reset();
+					// give focus back to #newPostInput
+					$("#newPostInput").focus();
+			}).fail(function(data){
+					console.log("post form did not post to server");
+			});
+		}
+		else {
+			
+		}
 	});
 	// END OF CREATE NEW POST
 
@@ -39,7 +45,7 @@ $(document).ready(function() {
 		// find id of .delete button
 		var deletePostId = $(this).data().id;
 		console.log(deletePostId);
-		// definte what it is going to delete
+		// define what it is going to delete
 		var deletePost = $(this).closest('li');
 
 		// ajax post to server
@@ -56,7 +62,7 @@ $(document).ready(function() {
 
 	// CREATE NEW COMMENT
 	// on submit of #newComment form
-	$('.updateButtons').click(function(e) {
+	$(document).on('click', '.updateButtons', function(e) {
 		e.preventDefault();
 		console.log("newComment form submitted");
 		console.log($(this).siblings().serialize());
@@ -69,14 +75,17 @@ $(document).ready(function() {
 			type: "POST",
 			data: $(this).siblings().serialize()
 		}).done(function(data) {
+				// change comment's _id so equal to post's _id
 				console.log(data);
-				// turn serialized data into <li> and string
-				var postHTML = makeHTMLStringComment(data);
-				//prepend to list
+				data._id = correctId;
+				console.log(data);
+				// turn serialized data into string with same Id as post
+				var commentHTML = makeHTMLStringComment(data);
+				// find correct list and prepend comment
 				var correctComment = $('.comment-ul[data-id="' + correctId + '"]');
-				correctComment.prepend(postHTML);
+				correctComment.prepend(commentHTML);
 				// clear form
-				$(".newComment")[0].reset();
+				$("#newCommentInput").val('');
 				// give focus back to #newPostInput
 				$("#newCommentInput").focus();
 		}).fail(function(data){
@@ -105,6 +114,8 @@ function makeHTMLStringPost (data){
 						      '<input type="text" id="newCommentInput" name="newComment" class="form-control" placeholder="Comments...">' +
 						      '<button type="submit" data-id="' + data._id + '" class="btn btn-primary updateButtons">Add</button>' +
 						    '</form>' +
+						    '<ul data-id="' + data._id + '" class="list-group comment-ul">' +
+						    '</ul>' +
 						  '</div>' +
 						'</div>' +
 					'</li>';
@@ -114,8 +125,8 @@ function makeHTMLStringPost (data){
 // MAKE HTML STRING COMMENT FUNCTION
 function makeHTMLStringComment (data){
 	return '<li class="list-group-item">' +
-						'<span>' + data.newComment + '<span' +
-						'<span id="commentDate">' + new Date() + '<span' +
+						'<span>' + data.newComment + '</span>' +
+						'<span id="commentDate">' + new Date() + '</span>' +
 					'</li>';
 }
 // END OF MAKE HTML STRING COMMENT FUNCTION
