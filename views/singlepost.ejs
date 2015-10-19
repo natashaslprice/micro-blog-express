@@ -28,48 +28,39 @@
 		  <div class="row">
 
 				<!-- start of LHC -->
-		    <div class="col-sm-2 col-sm-offset-1" id="LHC"> 
+		    <div class="col-sm-2 col-sm-offset-1" id="LHC">
 		      <h1 id="headerDate"></h1>
-		    </div> 
+		    </div>
 		    <!-- end of LHC -->
 
 				<!-- start of RHC -->
-		    <div class="col-sm-7 col-sm-offset-1" id="RHC"> 
+		    <div class="col-sm-7 col-sm-offset-1" id="RHC">
 
 		      <ul id="post-ul" class="list-group"> <!-- list of posts -->
-		      	<% for (var i = posts.length - 1; i >= 0; i--) { %>
 		      		<li class="list-group-item">
-		      			<%= posts[i].newPost %>
-								<button type="button" data-id="<%= posts[i].id %>" class="delete btn btn-default btn-sm"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+		      			<%= post.newPost %>
+								<button type="button" data-id="<%= post.id %>" class="delete btn btn-default btn-sm"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
 								<br>
-								<button class="btn btn-primary commentButtons" type="button" data-toggle="collapse" data-target="#toggle<%= posts[i].id %>" aria-expanded="false" aria-controls="toggle<%= posts[i].id %>">
+								<button class="btn btn-primary commentButtons" type="button" data-toggle="collapse" data-target="#toggle<%= post.id %>" aria-expanded="false" aria-controls="toggle<%= post.id %>">
 								  Comments
 								</button>
-								<div class="collapse" id="toggle<%= posts[i].id %>"> <!-- start of what is in toggle -->
+								<div class="collapse" id="toggle<%= post.id %>"> <!-- start of what is in toggle -->
 								  <div class="well">
-								    <form data-id="<%= posts[i].id %>" class="form-group newComment">
+								    <form data-id="<%= post.id %>" class="form-group newComment">
 								      <input type="text" id="newCommentInput" name="newComment" class="form-control" placeholder="Comments...">
-								      <button type="submit" data-id="<%= posts[i].id %>" class="btn btn-primary updateButtons">Add</button>
+								      <button type="submit" data-id="<%= post.id %>" class="btn btn-primary updateButtons">Add</button>
 								    </form>
-						        <ul data-id="<%= posts[i].id %>" class="list-group comment-ul"> <!-- list of comments -->
-						    	    <% for (var j = comments.length - 1; j >= 0; j--) { %>
-						    	    	<% if (comments[j].id === posts[i].id) { %>
-						    	    		<li class="list-group-item">
-						    	    			<%= comments[j].newComment %> 
-						    	    		</li>
-						    	    	<% } %>
-						        	<% } %>
-						        </ul> 
+						        <ul data-id="<%= post.id %>" class="list-group comment-ul"> <!-- list of comments -->
+						        </ul>
 								  </div>
 								</div> <!-- end of what is in toggle -->
 		      		</li>
-		      	<% } %>
 
 		      </ul> <!-- end of list of posts -->
-			
-		    </div> 
+
+		    </div>
 		    <!-- end of RHC -->
-		  
+
 		  </div> <!-- end of row -->
 		</div> <!-- end of container -->
 	</body>

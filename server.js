@@ -89,8 +89,9 @@ app.post('/api/comments', function(req, res){
 });
 
 // render singlepost page
-app.get('/posts/:_id', function(req, res) {
-	Post.findById(req.id, function(err, post){
+app.get('/posts/:id', function(req, res) {
+	console.log(req.params);
+	Post.findById(req.params.id, function(err, post){
 		if (err) {
 			console.log(err);
 		}
@@ -98,7 +99,7 @@ app.get('/posts/:_id', function(req, res) {
 		// 	if (err) {
 		// 		console.log(err);
 		// 	}
-			res.render('/posts/' + req.id, { post: post } );
+			res.render('singlepost', { post: post } );
 		// });
 	});
 });
@@ -109,8 +110,3 @@ app.get('/posts/:_id', function(req, res) {
 app.listen(3000, function(req, res) {
 	console.log("listening on port 3000");
 });
-
-
-
-
-

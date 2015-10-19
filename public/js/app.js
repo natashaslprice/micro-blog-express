@@ -9,7 +9,7 @@ $(document).ready(function() {
 	var currentDateDate = $.format.date(currentDate, 'ddd d MMM');
 
 	$("#headerDate").append(currentDateTime + '<hr>' + currentDateDate);
-	
+
 	// find starting post count and create integer
 	var postCount = $('#count').html();
 	postCount = parseInt(postCount);
@@ -98,7 +98,7 @@ $(document).ready(function() {
 					console.log(data);
 					data._id = correctId;
 					console.log(data);
-					// turn serialized data into string 
+					// turn serialized data into string
 					var commentHTML = makeHTMLStringComment(data);
 					// find correct list and prepend comment
 					var correctComment = $('.comment-ul[data-id="' + correctId + '"]');
@@ -118,6 +118,8 @@ $(document).ready(function() {
 	// END OF CREATE NEW COMMENT
 
 	// GET SINGLE PAGE VIEW
+/*  This is unnecessary since the button can just link directly to the page
+//  This is no longer a single-page-app 
 	$(document).on('click', '.linkButtons', function(e){
 		e.preventDefault();
 		console.log('link button clicked');
@@ -135,7 +137,7 @@ $(document).ready(function() {
 			console.log('singlepost get request failed');
 		});
 	});
-
+*/
 
 }); // END OF DOC READY
 
