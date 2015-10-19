@@ -28,21 +28,21 @@
 		  <div class="row">
 
 				<!-- start of LHC -->
-		    <div class="col-sm-2 col-sm-offset-1" id="LHC"> 
+		    <div class="col-sm-2 col-sm-offset-1" id="LHC">
 		      <h1 id="headerDate"></h1>
 		      <div id="count">
 		      	<%= posts.length %> posts
 		      </div>
-		    </div> 
+		    </div>
 		    <!-- end of LHC -->
 
 				<!-- start of RHC -->
-		    <div class="col-sm-7 col-sm-offset-1" id="RHC"> 
+		    <div class="col-sm-7 col-sm-offset-1" id="RHC">
 		      <form id="newPost" class="form-group"> <!-- new post form -->
 		       	<input type="text" id="newPostInput" name="newPost" class="form-control" rows="2" placeholder="What is in your brain?">
 		        <div class="text-right">
 		          <button type="submit" id="submitButton" class="btn btn-default">Dump</button>
-		        </div>  
+		        </div>
 
 		      </form> <!-- end of new post form -->
 
@@ -55,7 +55,7 @@
 								<button class="btn btn-primary commentButtons" type="button" data-toggle="collapse" data-target="#toggle<%= posts[i].id %>" aria-expanded="false" aria-controls="toggle<%= posts[i].id %>">
 								  Comments
 								</button>
-								<button class="btn btn-success linkButtons" type="button" >Single page view</button>
+								<a class="btn btn-success linkButtons" href="/posts/<%= posts[i].id %>" type="button" >Single page view</a>
 								<div class="collapse" id="toggle<%= posts[i].id %>"> <!-- start of what is in toggle -->
 								  <div class="well">
 								    <form data-id="<%= posts[i].id %>" class="form-group newComment">
@@ -66,21 +66,21 @@
 						    	    <% for (var j = comments.length - 1; j >= 0; j--) { %>
 						    	    	<% if (comments[j].id === posts[i].id) { %>
 						    	    		<li class="list-group-item">
-						    	    			<%= comments[j].newComment %> 
+						    	    			<%= comments[j].newComment %>
 						    	    		</li>
 						    	    	<% } %>
 						        	<% } %>
-						        </ul> 
+						        </ul>
 								  </div>
 								</div> <!-- end of what is in toggle -->
 		      		</li>
 		      	<% } %>
 
 		      </ul> <!-- end of list of posts -->
-			
-		    </div> 
+
+		    </div>
 		    <!-- end of RHC -->
-		  
+
 		  </div> <!-- end of row -->
 		</div> <!-- end of container -->
 	</body>
