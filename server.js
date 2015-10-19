@@ -88,6 +88,20 @@ app.post('/api/comments', function(req, res){
 	});
 });
 
+// render singlepost page
+app.get('/posts/:_id', function(req, res) {
+	Post.findById(req.id, function(err, post){
+		if (err) {
+			console.log(err);
+		}
+		// Comment.find({}, function(err, comments){
+		// 	if (err) {
+		// 		console.log(err);
+		// 	}
+			res.render('/posts/' + req.id, { post: post } );
+		// });
+	});
+});
 
 
 

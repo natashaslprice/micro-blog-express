@@ -24,7 +24,7 @@ $(document).ready(function() {
 		if ($("#newPostInput").val().trim().length > 0) {
 			// increase post count and update #count html
 			postCount = postCount + 1;
-			$("#count").html(postCount);
+			$("#count").html(postCount + " posts");
 			// ajax post to server
 			$.ajax({
 				url: "/api/posts",
@@ -57,7 +57,7 @@ $(document).ready(function() {
 		console.log("delete button clicked");
 		// decrease post count and update #count html
 		postCount = postCount - 1;
-		$("#count").html(postCount);
+		$("#count").html(postCount + ' posts');
 
 		// find id of .delete button
 		var deletePostId = $(this).data().id;
@@ -117,6 +117,25 @@ $(document).ready(function() {
 	});
 	// END OF CREATE NEW COMMENT
 
+	// GET SINGLE PAGE VIEW
+	$(document).on('click', '.linkButtons', function(e){
+		e.preventDefault();
+		console.log('link button clicked');
+		// get relevant _id
+		var singlePostId = $(this).siblings().attr('data-id');
+		console.log(singlePostId);
+
+		// ajax get to server
+		$.ajax({
+			url: "/posts/" + singlePostId,
+			type: "GET",
+		}).done(function(data){
+			console.log('singlepost get request sent');
+		}).fail(function(data){
+			console.log('singlepost get request failed');
+		});
+	});
+
 
 }); // END OF DOC READY
 
@@ -131,6 +150,7 @@ function makeHTMLStringPost (data){
 						'<button class="btn btn-primary commentButtons" type="button" data-toggle="collapse" data-target="#toggle' + data._id + '" aria-expanded="false" aria-controls="toggle' + data._id + '">' +
 						  'Comments' +
 						'</button>' +
+						'<button class="btn btn-success linkButtons" type="button" >Single page view</button>' +
 						'<div class="collapse" id="toggle' + data._id + '">' +
 						  '<div class="well">' +
 						    '<form data-id="' + data._id + '" class="form-group newComment">' +

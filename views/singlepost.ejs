@@ -30,21 +30,11 @@
 				<!-- start of LHC -->
 		    <div class="col-sm-2 col-sm-offset-1" id="LHC"> 
 		      <h1 id="headerDate"></h1>
-		      <div id="count">
-		      	<%= posts.length %> posts
-		      </div>
 		    </div> 
 		    <!-- end of LHC -->
 
 				<!-- start of RHC -->
 		    <div class="col-sm-7 col-sm-offset-1" id="RHC"> 
-		      <form id="newPost" class="form-group"> <!-- new post form -->
-		       	<input type="text" id="newPostInput" name="newPost" class="form-control" rows="2" placeholder="What is in your brain?">
-		        <div class="text-right">
-		          <button type="submit" id="submitButton" class="btn btn-default">Dump</button>
-		        </div>  
-
-		      </form> <!-- end of new post form -->
 
 		      <ul id="post-ul" class="list-group"> <!-- list of posts -->
 		      	<% for (var i = posts.length - 1; i >= 0; i--) { %>
@@ -55,7 +45,6 @@
 								<button class="btn btn-primary commentButtons" type="button" data-toggle="collapse" data-target="#toggle<%= posts[i].id %>" aria-expanded="false" aria-controls="toggle<%= posts[i].id %>">
 								  Comments
 								</button>
-								<button class="btn btn-success linkButtons" type="button" >Single page view</button>
 								<div class="collapse" id="toggle<%= posts[i].id %>"> <!-- start of what is in toggle -->
 								  <div class="well">
 								    <form data-id="<%= posts[i].id %>" class="form-group newComment">
