@@ -16,7 +16,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // connecting mongoose
 mongoose.connect('mongodb://localhost/microBlog');
 var Post = require("./models/post.js");
-var Comment = require("./models/comment.js");
 
 
 
@@ -27,12 +26,7 @@ app.get('/', function(req, res) {
 		if (err) {
 			console.log(err);
 		}
-		Comment.find({}, function(err, comments){
-			if (err) {
-				console.log(err);
-			}
-			res.render('index', { posts: posts, comments: comments } );
-		});
+		res.render('index', { posts: posts } );
 	});
 });
 
@@ -46,15 +40,6 @@ app.get('/api/posts', function(req, res){
 	});
 });
 
-// api GET route for comments
-app.get('/api/comments', function(req, res){
-	Comment.find({}, function(err, comments){
-		if (err) {
-			console.log(err);
-		}
-		res.json(comments);
-	});
-});
 
 // POST route for new posts
 app.post('/api/posts', function(req, res){
@@ -67,8 +52,8 @@ app.post('/api/posts', function(req, res){
 });
 
 // DELETE route for posts
-app.delete('/posts/:_id', function(req, res){
-	Post.findOne( { _id: req.params._id } , function(err, post){
+app.delete('/api/posts/:id', function(req, res){
+	Post.findOne( { _id: req.params.id } , function(err, post){
 		if (err) {
 			console.log(err);
 		}
@@ -79,28 +64,32 @@ app.delete('/posts/:_id', function(req, res){
 });
 
 // POST route for new comments
-app.post('/api/comments', function(req, res){
-	Comment.create(req.body, function(err, comment){
+app.post('/api/posts/:id/comments', function(req, res){
+	Post.findOne( { _id: req.params.id } , function(err, post){
 		if (err) {
 			console.log(err);
 		}
-		res.json(comment);
+		console.log(req.body);
+		post.comments.push(req.body);
+		post.save(function(err){
+			if (err) {
+				console.log(err);
+			}
+			res.json(post);
+		});
 	});
 });
 
+
+
 // render singlepost page
 app.get('/posts/:id', function(req, res) {
-	console.log(req.params);
-	Post.findById(req.params.id, function(err, post){
+	// console.log(req.params);
+	Post.findById( { _id: req.params.id } , function(err, post){
 		if (err) {
 			console.log(err);
 		}
-		// Comment.find({}, function(err, comments){
-		// 	if (err) {
-		// 		console.log(err);
-		// 	}
 			res.render('singlepost', { post: post } );
-		// });
 	});
 });
 

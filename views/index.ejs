@@ -50,7 +50,7 @@
 		      	<% for (var i = posts.length - 1; i >= 0; i--) { %>
 		      		<li class="list-group-item">
 		      			<%= posts[i].newPost %>
-								<button type="button" data-id="<%= posts[i].id %>" class="delete btn btn-default btn-sm"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+								<button type="button" data-id="<%= posts[i].id %>" class="deletePost btn btn-default btn-sm"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
 								<br>
 								<button class="btn btn-primary commentButtons" type="button" data-toggle="collapse" data-target="#toggle<%= posts[i].id %>" aria-expanded="false" aria-controls="toggle<%= posts[i].id %>">
 								  Comments
@@ -59,17 +59,15 @@
 								<div class="collapse" id="toggle<%= posts[i].id %>"> <!-- start of what is in toggle -->
 								  <div class="well">
 								    <form data-id="<%= posts[i].id %>" class="form-group newComment">
-								      <input type="text" id="newCommentInput" name="newComment" class="form-control" placeholder="Comments...">
+								      <input type="text" name="newComment" class="form-control newCommentInput" placeholder="Comments...">
 								      <button type="submit" data-id="<%= posts[i].id %>" class="btn btn-primary updateButtons">Add</button>
 								    </form>
 						        <ul data-id="<%= posts[i].id %>" class="list-group comment-ul"> <!-- list of comments -->
-						    	    <% for (var j = comments.length - 1; j >= 0; j--) { %>
-						    	    	<% if (comments[j].id === posts[i].id) { %>
-						    	    		<li class="list-group-item">
-						    	    			<%= comments[j].newComment %>
-						    	    		</li>
-						    	    	<% } %>
-						        	<% } %>
+						    	    <% for (var j = posts[i].comments.length-1; j >= 0; j--) { %>
+						    	    	<li class="list-group-item" data-id="<%= posts[i].comments[j].id %>"> 
+						    	    		<%= posts[i].comments[j].newComment %>
+						    	    	</li>
+						    	    <% } %>
 						        </ul>
 								  </div>
 								</div> <!-- end of what is in toggle -->
@@ -83,5 +81,17 @@
 
 		  </div> <!-- end of row -->
 		</div> <!-- end of container -->
+
+		<!-- Modal div for when form inputs are empty -->
+		<div class="modal fade" tabindex="-1" id="empty" role="dialog">
+		  <div class="modal-dialog modal-sm">
+		    <div class="modal-content">
+		      <br>
+		      <h2>Nothing to post! Please enter some text...<br><br><button type="button" class="btn btn-default pull-right" data-dismiss="modal">Close</button><br></h2>
+		    </div>
+		  </div>
+		</div>
+		<!-- End of modal div -->
+
 	</body>
 </html>

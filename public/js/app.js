@@ -45,21 +45,21 @@ $(document).ready(function() {
 			});
 		}
 		else {
-			alert('Oopsie! You need to type some words before we can create your Brain Dump...');
+			$("#empty").modal();
 		}
 	});
 	// END OF CREATE NEW POST
 
 	// DELETE POST
 	// on click of .delete form
-	$('#post-ul').on('click', '.delete', function(e) {
+	$('#post-ul').on('click', '.deletePost', function(e) {
 		e.preventDefault();
-		console.log("delete button clicked");
+		console.log("delete post button clicked");
 		// decrease post count and update #count html
 		postCount = postCount - 1;
 		$("#count").html(postCount + ' posts');
 
-		// find id of .delete button
+		// find id of .deletePost button
 		var deletePostId = $(this).data().id;
 		console.log(deletePostId);
 		// define what it is going to delete
@@ -67,7 +67,7 @@ $(document).ready(function() {
 
 		// ajax post to server
 		$.ajax({
-			url: "/posts/" + deletePostId,
+			url: "/api/posts/" + deletePostId,
 			type: "DELETE",
 		}).done(function(data) {
 			$(deletePost).remove();
@@ -82,62 +82,38 @@ $(document).ready(function() {
 	$(document).on('click', '.updateButtons', function(e) {
 		e.preventDefault();
 		console.log("newComment form submitted");
-		console.log($(this).siblings().serialize());
-		var correctId = $(this).attr('data-id');
-		console.log(correctId);
+		// find Id of post
+		var postId = $(this).attr('data-id');
+		console.log(postId);
 
 		// check input not empty
-		if ($("#newCommentInput").val().trim().length > 0) {
+		console.log($(this).siblings().serialize());
+		if ($(this).siblings().val().trim().length > 0) {
 			// ajax post to server
 			$.ajax({
-				url: "/api/comments",
+				url: "/api/posts/" + postId + "/comments",
 				type: "POST",
 				data: $(this).siblings().serialize()
 			}).done(function(data) {
-					// change comment's _id so equal to post's _id
-					console.log(data);
-					data._id = correctId;
-					console.log(data);
-					// turn serialized data into string
-					var commentHTML = makeHTMLStringComment(data);
+					// find correct comment in post object and turn into string
+					var correctCommentIndex = data.comments.length - 1;
+					var commentHTML = makeHTMLStringComment(data.comments[correctCommentIndex]);
 					// find correct list and prepend comment
-					var correctComment = $('.comment-ul[data-id="' + correctId + '"]');
-					correctComment.prepend(commentHTML + currentDateTime + " " + currentDateDate);
+					var correctPost = $('.comment-ul[data-id="' + postId + '"]');
+					correctPost.prepend(commentHTML);
 					// clear form
-					$("#newCommentInput").val('');
+					$(".newCommentInput").val('');
 					// give focus back to #newPostInput
-					$("#newCommentInput").focus();
+					$(".newCommentInput").focus();
 			}).fail(function(data){
 					console.log("comment form did not post to server");
 			});
 		}
 		else {
-			alert('Oopsie! You need to type some words before we can create your comment...');
+			$("#empty").modal();
 		}
 	});
 	// END OF CREATE NEW COMMENT
-
-	// GET SINGLE PAGE VIEW
-/*  This is unnecessary since the button can just link directly to the page
-//  This is no longer a single-page-app 
-	$(document).on('click', '.linkButtons', function(e){
-		e.preventDefault();
-		console.log('link button clicked');
-		// get relevant _id
-		var singlePostId = $(this).siblings().attr('data-id');
-		console.log(singlePostId);
-
-		// ajax get to server
-		$.ajax({
-			url: "/posts/" + singlePostId,
-			type: "GET",
-		}).done(function(data){
-			console.log('singlepost get request sent');
-		}).fail(function(data){
-			console.log('singlepost get request failed');
-		});
-	});
-*/
 
 }); // END OF DOC READY
 
@@ -147,7 +123,7 @@ $(document).ready(function() {
 function makeHTMLStringPost (data){
 	return '<li class="list-group-item">' +
 						data.newPost +
-						'<button type="button" data-id="' + data._id + '" class="delete btn btn-default btn-sm"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>' +
+						'<button type="button" data-id="' + data._id + '" class="deletePost btn btn-default btn-sm"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>' +
 						'<br>' +
 						'<button class="btn btn-primary commentButtons" type="button" data-toggle="collapse" data-target="#toggle' + data._id + '" aria-expanded="false" aria-controls="toggle' + data._id + '">' +
 						  'Comments' +
@@ -156,7 +132,7 @@ function makeHTMLStringPost (data){
 						'<div class="collapse" id="toggle' + data._id + '">' +
 						  '<div class="well">' +
 						    '<form data-id="' + data._id + '" class="form-group newComment">' +
-						      '<input type="text" id="newCommentInput" name="newComment" class="form-control" placeholder="Comments...">' +
+						      '<input type="text" name="newComment" class="form-control newCommentInput" placeholder="Comments...">' +
 						      '<button type="submit" data-id="' + data._id + '" class="btn btn-primary updateButtons">Add</button>' +
 						    '</form>' +
 						    '<ul data-id="' + data._id + '" class="list-group comment-ul">' +
@@ -169,8 +145,9 @@ function makeHTMLStringPost (data){
 
 // MAKE HTML STRING COMMENT FUNCTION
 function makeHTMLStringComment (data){
-	return '<li class="list-group-item">' +
+	return '<li class="list-group-item" data-id="' + data._id + '">' +
 						'<span>' + data.newComment + '</span>' +
+						'<button type="button" data-id="' + data._id + '" class="deleteComment btn btn-default btn-sm"> <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>' +
 					'</li>';
 }
 // END OF MAKE HTML STRING COMMENT FUNCTION
