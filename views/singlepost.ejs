@@ -44,7 +44,7 @@
 								<h2>Comments:</h2>
 			            <ul data-id="<%= post.id %>" class="list-group comment-ul"> <!-- list of comments -->
 			        	    <% for (var j = post.comments.length-1; j >= 0; j--) { %>
-				        	    <li class="list-group-item" data-id="<%= posts[i].comments[j].id %>"> 
+				        	    <li class="list-group-item" data-id="<%= post.comments[j].id %>"> 
 					        	    <%= post.comments[j].newComment %> 
 			        	    </li>
 			        	    <% } %>
